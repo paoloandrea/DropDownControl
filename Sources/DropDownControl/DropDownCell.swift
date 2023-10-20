@@ -51,6 +51,18 @@ class DropDownCell: UICollectionViewCell {
             numberChannelsLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
+    
+    override var isHighlighted: Bool {
+        didSet {
+            contentView.backgroundColor = isHighlighted ? self.nameLabel.textColor.withAlphaComponent(0.15) : .clear
+        }
+    }
+
+    override var isSelected: Bool {
+        didSet {
+            contentView.backgroundColor = isSelected ? self.nameLabel.textColor.withAlphaComponent(0.15) : .clear
+        }
+    }
 }
 
 class DropDownHeaderView: UICollectionReusableView {
