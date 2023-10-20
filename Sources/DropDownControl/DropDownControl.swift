@@ -10,8 +10,13 @@ import UIKit
 
 /// Structure that represents items for the drop down.
 public struct DropDownItems {
-    let name:String!
-    let totaleChannels:Int!
+    let name:String
+    let totaleChannels:Int
+    
+    public init(name: String, totaleChannels: Int) {
+        self.name = name
+        self.totaleChannels = totaleChannels
+    }
 }
 
 /// A control that contains a button that triggers a drop down table.
@@ -65,7 +70,7 @@ public final class DropDownControl: UIControl {
         return CGSize(width: UIView.noIntrinsicMetric, height: controlTitleLabel.intrinsicContentSize.height)
     }
     
-    init() {
+    public init() {
         super.init(frame: .zero)
         self.isUserInteractionEnabled = true
         

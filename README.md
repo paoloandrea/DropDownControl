@@ -3,7 +3,7 @@
 DropDownControl is a custom UIControl that facilitates the display of a dropdown list, tailored for IPTV applications. It allows users to select a bouquet from a predefined list.
 
 <p align="center">
-  <img src="https://github.com/paoloandrea/DropDownControl/blob/main/Assets/dropdowncontrol_v1.gif.gif?raw=true" alt="Screenshot of DropDownControl" width="250px" />
+  <img src="https://github.com/paoloandrea/DropDownControl/blob/main/Assets/dropdowncontrol_v1.gif?raw=true" alt="Screenshot of DropDownControl" width="250px" />
 </p>
 
 ## Features:

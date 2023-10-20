@@ -111,7 +111,7 @@ class DropDownBouquet: NSObject {
         window.addSubview(dropdownCollectionView!)
         
         NSLayoutConstraint.activate([
-            dropdownCollectionView!.topAnchor.constraint(equalTo: window.safeAreaLayoutGuide.topAnchor, constant:0), //sourceRect.origin.y + titleHeight
+            dropdownCollectionView!.topAnchor.constraint(equalTo: sourceRect.origin.y, constant:0), //sourceRect.origin.y + titleHeight
             dropdownCollectionView!.leadingAnchor.constraint(equalTo: window.safeAreaLayoutGuide.leadingAnchor, constant: 0), //sourceRect.origin.x,
             dropdownCollectionView!.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: 0),
             //dropdownCollectionView!.widthAnchor.constraint(equalToConstant: window.widthAnchor),
