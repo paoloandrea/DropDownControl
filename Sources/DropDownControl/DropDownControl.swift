@@ -9,12 +9,17 @@
 import UIKit
 
 /// Structure that represents items for the drop down.
-public struct DropDownItems {
-    let name:String!
-    let totaleChannels:Int!
+public struct DropDownItems: Equatable {
+    let name: String
+    let totaleChannels: Int
+
     public init(name: String, totaleChannels: Int) {
         self.name = name
         self.totaleChannels = totaleChannels
+    }
+    
+    public static func ==(lhs: DropDownItems, rhs: DropDownItems) -> Bool {
+        return lhs.name == rhs.name && lhs.totaleChannels == rhs.totaleChannels
     }
 }
 
@@ -160,6 +165,22 @@ public final class DropDownControl: UIControl {
         setupView()
         self.updateLabel()
     }
+    public func updateItems(_ newItems: [DropDownItems]) {
+        // 1. Aggiorna la variabile 'items' con i nuovi elementi
+        self.items = newItems
+
+        // 2. Aggiorna la `controlTitleLabel` se necessario.
+        // (Questo dipende dalla tua logica. Ad esempio, potresti voler reimpostare il testo al valore predefinito del controller quando gli elementi vengono aggiornati. Ho supposto questa logica qui, ma potresti volerla modificare.)
+        if newItems.isEmpty {
+            selectedText = nil
+        }
+        controlTitleLabel.text = controllerName
+
+        // Aggiorna la visibilità del pulsante e l'interazione dell'utente in base agli elementi
+        button.isHidden = newItems.isEmpty
+        button.isUserInteractionEnabled = !newItems.isEmpty
+        textStackView.isUserInteractionEnabled = !newItems.isEmpty
+    }
     
 }
 
@@ -169,6 +190,8 @@ extension DropDownControl: DropDownBouquetDelegate {
         didSelectItem?(selectedText!)
     }
 }
+
+
 
 #if compiler(>=5.9)
 #Preview {
