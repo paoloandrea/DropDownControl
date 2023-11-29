@@ -27,14 +27,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let items = [DropDownItems.init(name: "Curabitur pretium orci", totaleChannels: 2),
-                                 DropDownItems.init(name: "Proin sollicitudin", totaleChannels: 523),
-                                 DropDownItems.init(name: "Lorem ipsum", totaleChannels: 70),
-                                 DropDownItems.init(name: "Aliquam sit amet lacinia", totaleChannels: 2),
-                                 DropDownItems.init(name: "Pellentesque", totaleChannels: 14),
-                                 DropDownItems.init(name: "Nulla iaculis leo nulla", totaleChannels: 22),
-                                 DropDownItems.init(name: "Donec suscipit", totaleChannels: 132),
-                                 DropDownItems.init(name: "Sed blandit arcu quis", totaleChannels: 223)
+        let items = [DropDownItems.init(name: "Curabitur pretium orci", totalChannels: 2),
+                                 DropDownItems.init(name: "Proin sollicitudin", totalChannels: 523),
+                                 DropDownItems.init(name: "Lorem ipsum", totalChannels: 70),
+                                 DropDownItems.init(name: "Aliquam sit amet lacinia", totalChannels: 2),
+                                 DropDownItems.init(name: "Pellentesque", totalChannels: 14),
+                                 DropDownItems.init(name: "Nulla iaculis leo nulla", totalChannels: 22),
+                                 DropDownItems.init(name: "Donec suscipit", totalChannels: 132),
+                                 DropDownItems.init(name: "Sed blandit arcu quis", totalChannels: 223)
         ]
         
         dropDownControl.withConfig(controllerName: "DropDown name", items: items)

@@ -191,7 +191,7 @@ extension DropDownBouquet: UICollectionViewDataSource {
         // Configura le label (supponendo che la tua UICollectionViewCell personalizzata abbia le stesse proprietà della UITableViewCell originale)
         cell.nameLabel.textColor = textColor?.withAlphaComponent(0.8) ?? .white.withAlphaComponent(0.8)
         cell.nameLabel.text = menuItems[indexPath.row].name
-        cell.numberChannelsLabel.text = "\(menuItems[indexPath.row].totaleChannels ?? 0)"
+        cell.numberChannelsLabel.text = "\(menuItems[indexPath.row].totalChannels ?? 0)"
         return cell
     }
     
