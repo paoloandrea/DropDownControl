@@ -213,7 +213,7 @@ extension DropDownControl: DropDownBouquetDelegate {
 
 
 
-#if compiler(>=5.9)
+@available(iOS 17.0, *)
 #Preview {
     let dropdownControl = DropDownControl.init()
     dropdownControl.backgroundColor = .darkGray
@@ -223,4 +223,3 @@ extension DropDownControl: DropDownBouquetDelegate {
     
     return dropdownControl
 }
-#endif
