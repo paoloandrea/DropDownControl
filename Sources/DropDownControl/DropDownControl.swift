@@ -27,10 +27,9 @@ public struct DropDownItems: Hashable {
     }
 }
 
-/// A control that contains a button that triggers a drop down table.
 public final class DropDownControl: UIControl {
     
-    private let textStackView =  {
+    private let textStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
@@ -38,7 +37,7 @@ public final class DropDownControl: UIControl {
         return stackView
     }()
     
-    private var controllerName:String?
+    private var controllerName: String?
     private var controlTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -59,10 +58,7 @@ public final class DropDownControl: UIControl {
         return button
     }()
     
-    
-    
     private var dropdownMenu: DropDownBouquet?
-    
     private var items: [DropDownItems] = []
     
     private var selectedText: String? {
@@ -73,7 +69,6 @@ public final class DropDownControl: UIControl {
     
     public var didSelectItem: ((String) -> Void)?
     
-    /// The default size of the control.
     public override var intrinsicContentSize: CGSize {
         return CGSize(width: UIView.noIntrinsicMetric, height: controlTitleLabel.intrinsicContentSize.height)
     }
@@ -81,15 +76,15 @@ public final class DropDownControl: UIControl {
     public init() {
         super.init(frame: .zero)
         self.isUserInteractionEnabled = true
-        
-        
+        setupView()
     }
     
     required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupView()
     }
     
-    private func setupView(){
+    private func setupView() {
         configureLabel()
         configureButton()
         configureLayout()
@@ -107,7 +102,6 @@ public final class DropDownControl: UIControl {
     
     private func configureLayout() {
         textStackView.addArrangedSubview(controlTitleLabel)
-        //textStackView.addArrangedSubview(channelsNumber)
         addSubview(textStackView)
         addSubview(button)
         
@@ -118,22 +112,15 @@ public final class DropDownControl: UIControl {
             button.leadingAnchor.constraint(equalTo: textStackView.trailingAnchor, constant: 8),
             button.trailingAnchor.constraint(equalTo: trailingAnchor),
             button.centerYAnchor.constraint(equalTo: centerYAnchor)
-            
         ])
     }
     
-    
     private func updateLabel() {
-        if let selectedText = selectedText {
-            controlTitleLabel.text = selectedText
-        } else {
-            controlTitleLabel.text = controllerName
-        }
-        
-        button.isHidden = items.count == 0 ? true : false
-        button.isUserInteractionEnabled = items.count == 0 ? false : true
-        textStackView.isUserInteractionEnabled = items.count == 0 ? false : true
-        
+        controlTitleLabel.text = selectedText ?? controllerName
+        let isEmpty = items.isEmpty
+        button.isHidden = isEmpty
+        button.isUserInteractionEnabled = !isEmpty
+        textStackView.isUserInteractionEnabled = !isEmpty
     }
     
     @objc
@@ -143,65 +130,53 @@ public final class DropDownControl: UIControl {
     
     @objc
     public func showDropdownMenu() {
-        guard let window = UIApplication.shared.keyWindow else {
+        guard let window = UIApplication.shared.keyWindow,
+              let controllerName = controllerName else {
             return
         }
         
-        let sourceRect = CGRect(x: 0, y: self.frame.maxY+26, width: window.frame.width, height:window.frame.height)//convert(bounds, to: window)
+        // Calcola il frame del bottone relativo alla finestra
+        let buttonFrame = self.convert(button.frame, to: window)
         
-        guard let controllerName = controllerName else {
-            return
-        }
+        // Posiziona il dropdown menu in modo che il bottone di chiusura (X) si allinei con il bottone di apertura (V)
+        let sourceRect = CGRect(x: buttonFrame.origin.x, y: buttonFrame.maxY, width: window.frame.width, height: window.frame.height - buttonFrame.maxY)
+        
         dropdownMenu = DropDownBouquet(controllerName: controllerName, menuItems: items, presentingViewController: window.rootViewController!)
         dropdownMenu?.delegate = self
-        
-        dropdownMenu?.show(from: self, sourceRect: sourceRect)
+        dropdownMenu?.show(from: self, sourceRect: sourceRect, buttonFrame: buttonFrame)
     }
-    
-    /// Configure the dropdown control with given parameters.
-    /// - Parameters:
-    ///   - controllerName: The name of the controller.
-    ///   - items: The items to display in the dropdown.
-    public func withConfig(controllerName: String, items: [DropDownItems]) {
-        // Rimuove duplicati mantenendo l'ordine
-        let uniqueOrderedSet = NSOrderedSet(array: items)
-        var uniqueItems = [DropDownItems]()
-        for case let item as DropDownItems in uniqueOrderedSet {
-            uniqueItems.append(item)
+    /*
+    @objc
+    public func showDropdownMenu() {
+        guard let window = UIApplication.shared.keyWindow,
+              let controllerName = controllerName else {
+            return
         }
         
-        self.items = uniqueItems
+        let sourceRect = CGRect(x: 0, y: self.frame.maxY + 26, width: window.frame.width, height: window.frame.height)
+        dropdownMenu = DropDownBouquet(controllerName: controllerName, menuItems: items, presentingViewController: window.rootViewController!)
+        dropdownMenu?.delegate = self
+        dropdownMenu?.show(from: self, sourceRect: sourceRect)
+    }
+    */
+    public func withConfig(controllerName: String, items: [DropDownItems]) {
+        self.items = Array(NSOrderedSet(array: items)) as! [DropDownItems]
         self.controllerName = controllerName
         self.controlTitleLabel.text = controllerName
         setupView()
         self.updateLabel()
     }
-
-
+    
     public func updateItems(_ newItems: [DropDownItems]) {
-        // Rimuove duplicati mantenendo l'ordine
-        let uniqueOrderedSet = NSOrderedSet(array: newItems)
-        var uniqueItems = [DropDownItems]()
-        for case let item as DropDownItems in uniqueOrderedSet {
-            uniqueItems.append(item)
-        }
-
-        // Aggiorna la variabile 'items' con i nuovi elementi
-        self.items = uniqueItems
-
-        // Aggiorna la `controlTitleLabel` se necessario
-        if uniqueItems.isEmpty {
+        self.items = Array(NSOrderedSet(array: newItems)) as! [DropDownItems]
+        if items.isEmpty {
             selectedText = nil
         }
         controlTitleLabel.text = controllerName
-
-        // Aggiorna la visibilità del pulsante e l'interazione dell'utente in base agli elementi
-        button.isHidden = uniqueItems.isEmpty
-        button.isUserInteractionEnabled = !uniqueItems.isEmpty
-        textStackView.isUserInteractionEnabled = !uniqueItems.isEmpty
+        button.isHidden = items.isEmpty
+        button.isUserInteractionEnabled = !items.isEmpty
+        textStackView.isUserInteractionEnabled = !items.isEmpty
     }
-
-    
 }
 
 extension DropDownControl: DropDownBouquetDelegate {

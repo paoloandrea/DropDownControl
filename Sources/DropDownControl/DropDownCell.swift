@@ -1,3 +1,4 @@
+/// A control that contains a button that triggers a drop down table.
 //
 //  DropDownCell.swift
 //
@@ -73,6 +74,7 @@ class DropDownHeaderView: UICollectionReusableView {
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.numberOfLines = 1
         label.textColor = .white
+        label.backgroundColor = .clear
         return label
     }()
     
