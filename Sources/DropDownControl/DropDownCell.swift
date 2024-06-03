@@ -36,7 +36,7 @@ class DropDownCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-        
+        self.alpha = 0
         contentView.addSubview(nameLabel)
         contentView.addSubview(numberChannelsLabel)
         

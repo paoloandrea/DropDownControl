@@ -3,7 +3,8 @@
 //  IPTV
 //
 //  Created by Paolo Rossignoli on 18/05/23.
-//  Copyright © 2023 IP Television. All rights reserved.
+//  Updated by Paolo on 3/06/24
+//  Copyright © 2024 IP Television. All rights reserved.
 //
 
 import UIKit
@@ -12,7 +13,7 @@ import UIKit
 public struct DropDownItems: Hashable {
     let name: String
     let totalChannels: Int
-
+    
     public init(name: String, totalChannels: Int) {
         self.name = name
         self.totalChannels = totalChannels
@@ -21,7 +22,7 @@ public struct DropDownItems: Hashable {
     public static func ==(lhs: DropDownItems, rhs: DropDownItems) -> Bool {
         return lhs.name == rhs.name
     }
-
+    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
@@ -140,25 +141,18 @@ public final class DropDownControl: UIControl {
         
         // Posiziona il dropdown menu in modo che il bottone di chiusura (X) si allinei con il bottone di apertura (V)
         let sourceRect = CGRect(x: buttonFrame.origin.x, y: buttonFrame.maxY, width: window.frame.width, height: window.frame.height - buttonFrame.maxY)
+        let config = DropDownConfig(headerBackgroundColor: .black,
+                                    headerFont: UIFont.boldSystemFont(ofSize: 20),
+                                    cellFont: UIFont.systemFont(ofSize: 18),
+                                    cellTextColor: .lightGray,
+                                    backgroundColor: .black,
+                                    textColor: .white)
+        dropdownMenu = DropDownBouquet(controllerName: controllerName, menuItems: items, presentingViewController: window.rootViewController!, config: config)
         
-        dropdownMenu = DropDownBouquet(controllerName: controllerName, menuItems: items, presentingViewController: window.rootViewController!)
         dropdownMenu?.delegate = self
         dropdownMenu?.show(from: self, sourceRect: sourceRect, buttonFrame: buttonFrame)
     }
-    /*
-    @objc
-    public func showDropdownMenu() {
-        guard let window = UIApplication.shared.keyWindow,
-              let controllerName = controllerName else {
-            return
-        }
-        
-        let sourceRect = CGRect(x: 0, y: self.frame.maxY + 26, width: window.frame.width, height: window.frame.height)
-        dropdownMenu = DropDownBouquet(controllerName: controllerName, menuItems: items, presentingViewController: window.rootViewController!)
-        dropdownMenu?.delegate = self
-        dropdownMenu?.show(from: self, sourceRect: sourceRect)
-    }
-    */
+    
     public func withConfig(controllerName: String, items: [DropDownItems]) {
         self.items = Array(NSOrderedSet(array: items)) as! [DropDownItems]
         self.controllerName = controllerName

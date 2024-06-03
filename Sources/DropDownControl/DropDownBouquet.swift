@@ -3,6 +3,8 @@
 //
 //
 //  Created by Paolo Rossignoli on 19/10/23.
+//  Updated by Paolo on 3/06/24
+//  Copyright © 2024 IP Television. All rights reserved.
 //
 
 import UIKit
@@ -26,7 +28,7 @@ class DropDownBouquet: NSObject {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(DropDownCell.self, forCellWithReuseIdentifier: "DropDownCell")
         collectionView.register(DropDownHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "DropDownHeaderView")
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .clear // Assicurarsi che lo sfondo della collection view sia trasparente
         collectionView.alpha = 0
         return collectionView
     }()
@@ -51,15 +53,13 @@ class DropDownBouquet: NSObject {
     
     private let titleHeight: CGFloat = 40
     private let cellHeight: CGFloat = 29
-    private let textColor: UIColor?
-    private let backgroundColor: UIColor?
+    private var config: DropDownConfig?
     
-    init(controllerName: String, menuItems: [DropDownItems], textColor: UIColor? = .white, backgroundColor: UIColor? = .black, presentingViewController: UIViewController) {
+    init(controllerName: String, menuItems: [DropDownItems], presentingViewController: UIViewController, config: DropDownConfig? = nil) {
         self.controllerName = controllerName
         self.menuItems = menuItems
         self.presentingViewController = presentingViewController
-        self.textColor = textColor
-        self.backgroundColor = backgroundColor
+        self.config = config
         super.init()
         configureCollectionView()
     }
@@ -80,7 +80,7 @@ class DropDownBouquet: NSObject {
     }
     
     private func setupBackgroundView(in window: UIWindow) {
-        backgroundView.backgroundColor = backgroundColor
+        backgroundView.backgroundColor = config?.backgroundColor ?? .black
         backgroundView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
         window.addSubview(backgroundView)
         NSLayoutConstraint.activate([
@@ -118,13 +118,17 @@ class DropDownBouquet: NSObject {
     }
     
     private func animateDropdownAppearance() {
+        guard let collectionView = dropdownCollectionView else { return }
         dropdownCollectionView?.reloadData()
         dropdownCollectionView?.layoutIfNeeded()
+        let headerView = collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader).first as? DropDownHeaderView
         
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, animations: {
             self.dropdownCollectionView?.alpha = 1.0
             self.backgroundView.alpha = 1.0
             self.closeButton?.alpha = 1.0
+        }) { _ in
+            headerView?.alpha = 1
         }
     }
     
@@ -138,15 +142,14 @@ class DropDownBouquet: NSObject {
     
     @objc internal func dismissMenu() {
         guard let collectionView = dropdownCollectionView, let closeButton = closeButton else { return }
-
-        // Trova l'header view della collection view
+        
         let headerView = collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader).first as? DropDownHeaderView
         
         UIView.animate(withDuration: 0.3, animations: {
             collectionView.alpha = 0.0
             self.backgroundView.alpha = 0
             closeButton.alpha = 0
-            headerView?.alpha = 0 // Imposta l'alpha della header view a 0
+            headerView?.alpha = 0
         }) { _ in
             collectionView.removeFromSuperview()
             self.dropdownCollectionView = nil
@@ -168,7 +171,15 @@ extension DropDownBouquet: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DropDownCell", for: indexPath) as? DropDownCell else {
             return UICollectionViewCell()
         }
-        cell.nameLabel.textColor = textColor?.withAlphaComponent(0.8) ?? .white.withAlphaComponent(0.8)
+        if let config = config {
+            cell.nameLabel.textColor = config.cellTextColor.withAlphaComponent(0.8)
+            cell.nameLabel.font = config.cellFont
+            cell.numberChannelsLabel.font = config.cellFont
+        } else {
+            cell.nameLabel.textColor = .white.withAlphaComponent(0.8)
+            cell.nameLabel.font = UIFont.systemFont(ofSize: 17)
+            cell.numberChannelsLabel.font = UIFont.systemFont(ofSize: 17)
+        }
         cell.nameLabel.text = menuItems[indexPath.row].name
         cell.numberChannelsLabel.text = "\(menuItems[indexPath.row].totalChannels)"
         return cell
@@ -178,9 +189,16 @@ extension DropDownBouquet: UICollectionViewDataSource {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "DropDownHeaderView", for: indexPath) as! DropDownHeaderView
-            headerView.backgroundColor = backgroundColor ?? .black
-            headerView.backgroundColor = .clear
-            headerView.dropdownTitleView.textColor = textColor ?? .white
+            if let config = config {
+                headerView.backgroundColor = config.headerBackgroundColor
+                headerView.dropdownTitleView.textColor = config.textColor
+                headerView.dropdownTitleView.font = config.headerFont
+            } else {
+                headerView.backgroundColor = .black
+                headerView.dropdownTitleView.textColor = .white
+                headerView.dropdownTitleView.font = UIFont.boldSystemFont(ofSize: 18)
+            }
+            headerView.alpha = 0
             headerView.dropdownTitleView.text = self.controllerName
             return headerView
         default:

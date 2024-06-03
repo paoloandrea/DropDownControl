@@ -19,6 +19,7 @@
 		5279F9072AE16B7600BF57A9 /* DropDownControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5279F9042AE16B7600BF57A9 /* DropDownControl.swift */; };
 		5279F9082AE16B7600BF57A9 /* DropDownBouquet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5279F9052AE16B7600BF57A9 /* DropDownBouquet.swift */; };
 		5279F9092AE16B7600BF57A9 /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5279F9062AE16B7600BF57A9 /* DropDownCell.swift */; };
+		529BC4F32C0D922600A9F6F7 /* DropDownConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529BC4F22C0D922600A9F6F7 /* DropDownConfig.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		5279F9042AE16B7600BF57A9 /* DropDownControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropDownControl.swift; path = ../../Sources/DropDownControl/DropDownControl.swift; sourceTree = "<group>"; };
 		5279F9052AE16B7600BF57A9 /* DropDownBouquet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropDownBouquet.swift; path = ../../Sources/DropDownControl/DropDownBouquet.swift; sourceTree = "<group>"; };
 		5279F9062AE16B7600BF57A9 /* DropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DropDownCell.swift; path = ../../Sources/DropDownControl/DropDownCell.swift; sourceTree = "<group>"; };
+		529BC4F22C0D922600A9F6F7 /* DropDownConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				5279F9042AE16B7600BF57A9 /* DropDownControl.swift */,
 				5279F9052AE16B7600BF57A9 /* DropDownBouquet.swift */,
 				5279F9062AE16B7600BF57A9 /* DropDownCell.swift */,
+				529BC4F22C0D922600A9F6F7 /* DropDownConfig.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				5279F8D32AE16B2000BF57A9 /* AppDelegate.swift in Sources */,
 				5279F9072AE16B7600BF57A9 /* DropDownControl.swift in Sources */,
 				5279F9092AE16B7600BF57A9 /* DropDownCell.swift in Sources */,
+				529BC4F32C0D922600A9F6F7 /* DropDownConfig.swift in Sources */,
 				5279F8D52AE16B2000BF57A9 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
